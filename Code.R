@@ -4,10 +4,13 @@
 
 #knjižnica za izvedbo select stavka
 library(dplyr)
+library(sandwich)
+library(lmtest)
 
 #uvoz podatkov
 
 Industry49_data <- read.csv("data/49_Industry_Portfolios.csv", header = TRUE, sep = ",")
+
 #View(Industry49_data)
 
 #naključna izbira 40 industrij
@@ -21,8 +24,7 @@ data1<-select(Industry49_data,Date,naključnaizbirastolpcev)
 #OLS 
 # 
 
-library(sandwich)
-library(lmtest)
+
 
 # fm <- lm(RealInv ~ RealGNP + RealInt, data = Investment)
 # ## Newey & West (1994) compute this type of estimator
