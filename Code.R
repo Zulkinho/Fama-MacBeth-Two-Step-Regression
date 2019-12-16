@@ -9,6 +9,14 @@ library(lmtest)
 
 #uvoz podatkov
 
+############################################################################
+# This file was created by CMPT_IND_RETS using the 201910 CRSP database.   #
+# It contains value- and equal-weighted returns for 49 industry portfolios.#
+# The portfolios are constructed at the end of June.                       #
+# The annual returns are from January to December.                         #
+# Missing data are indicated by -99.99 or -999.                            #
+############################################################################
+
 Industry49_data <- read.csv("data/49_Industry_Portfolios.csv", header = TRUE, sep = ",")
 
 #View(Industry49_data)
@@ -18,6 +26,7 @@ Industry49_data <- read.csv("data/49_Industry_Portfolios.csv", header = TRUE, se
 naključnaizbirastolpcev<-(sample(colnames(Industry49_data[2:50]), 40))
 
 data1<-select(Industry49_data,Date,naključnaizbirastolpcev)
+
 View(data1)
 
 #1. pasage
