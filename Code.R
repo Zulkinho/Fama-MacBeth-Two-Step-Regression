@@ -18,6 +18,7 @@ Industry49_data <- read.csv("data/49_Industry_Portfolios.csv", header = TRUE, se
 naključnaizbirastolpcev<-(sample(colnames(Industry49_data[2:50]), 40))
 
 data1<-select(Industry49_data,Date,naključnaizbirastolpcev)
+
 View(data1)
 
 #1. pasage
