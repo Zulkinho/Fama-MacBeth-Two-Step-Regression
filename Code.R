@@ -18,11 +18,17 @@ Industry49_data <- read.csv("data/49_Industry_Portfolios.csv", header = TRUE, se
 naključnaizbirastolpcev<-(sample(colnames(Industry49_data[2:50]), 40))
 
 data1<-select(Industry49_data,Date,naključnaizbirastolpcev)
+View(data1)
 
 #1. pasage
 
 #OLS 
 # 
+# temp.lm = lm( ~ data1[2]+data1[3]+data1[4]+data1[5]+data1[6]+data1[7]+data1[8]+data1[9]+data1[10]+data1[11]+data1[12]+data1[13]+data1[14]+data1[15]+data1[16]+data1[17]+data1[18]+data1[19]+data1[20]+data1[21]+data1[22]+data1[23]+data1[24]+data1[25]+data1[26]+data1[27]+data1[28]+data1[29]+data1[30]+data1[31]+data1[32]+data1[33]+data1[34]+data1[35]+data1[36]+data1[37]+data1[38]+data1[39]+data1[40]+data1[41]+data1[42])
+# temp.summ <- summary(temp.lm)
+# temp.summ$coefficients <- unclass(coeftest(temp.lm, vcov. = NeweyWest))
+# 
+# print (temp.summ$coefficients)
 
 
 
