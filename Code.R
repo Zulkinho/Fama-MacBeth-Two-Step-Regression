@@ -6,6 +6,7 @@
 library(dplyr)
 library(sandwich)
 library(lmtest)
+library(PerformanceAnalytics)
 
 #uvoz podatkov
 
@@ -19,16 +20,22 @@ library(lmtest)
 
 Industry49_data <- read.csv("data/49_Industry_Portfolios.csv", header = TRUE, sep = ",")
 
-#View(Industry49_data)
-
 #naključna izbira 40 industrij
 #
 naključnaizbirastolpcev<-(sample(colnames(Industry49_data[2:50]), 40))
 
 data1<-select(Industry49_data,Date,naključnaizbirastolpcev)
-
+data1<-xls(data1)
 View(data1)
 
+for (i in (2:41)){
+y<-data1[i]
+x<-data.frame()
+fit<-lm(y~as.matrix(x))
+abline(fit)
+summary(fit) # standard estimates
+coeftest(fit,vcov=NeweyWest(fit,verbose=T))
+}
 #1. pasage
 
 #OLS 
