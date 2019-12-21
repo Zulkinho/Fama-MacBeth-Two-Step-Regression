@@ -125,6 +125,37 @@ portfolio10_returns<-portfolio10[1]+portfolio10[2]+portfolio10[3]+portfolio10[4]
 names(portfolio10_returns)<-"port10"
 
 #tabela vseh portfeljev
-tabela_portfeljev<-data_frame()
+portfelji_skupaj<-data.frame(data1[1],portfolio1_returns,portfolio2_returns,portfolio3_returns,portfolio4_returns,portfolio5_returns,portfolio6_returns,portfolio7_returns,portfolio8_returns,portfolio9_returns,portfolio10_returns)
+View(portfelji_skupaj)
 
+#1. Pasage for portfolios
+#we get portfolios alphas from
+alphas_p<-c()
+for (i in (2:11)){
+  y<-portfelji_skupaj[i]-ff3[5]
+  y<-as.matrix(y)
+  x<-ff3[2]
+  x<-as.matrix(x)
+  fit<-lm(y~x)
+  a<-coeftest(fit,vcov=NeweyWest(fit,verbose=T))
+  alphas_p[i-1] <- a[1]
+}
+alphas_p
+names(alphas_p)<-names(portfelji_skupaj)[2:11]
 
+#we get portfolios betas from
+betas_p<-c()
+for (i in (2:11)){
+  y<-portfelji_skupaj[i]-ff3[5]
+  y<-as.matrix(y)
+  x<-ff3[2]
+  x<-as.matrix(x)
+  fit<-lm(y~x)
+  a<-coeftest(fit,vcov=NeweyWest(fit,verbose=T))
+  betas_p[i-1] <- a[2]
+}
+betas_p
+names(betas_p)<-names(portfelji_skupaj)[2:11]
+
+#
+sum(portfelji_skupaj[2])
