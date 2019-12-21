@@ -32,16 +32,20 @@ View(Industry49_data)
 
 FF_Research_Data_Factors <- read.csv("data/F-F_Research_Data_Factors.csv", header = TRUE, sep = ",")
 View(FF_Research_Data_Factors)
-ff3<-FF_Research_Data_Factors
+ff3_original<-FF_Research_Data_Factors
 
 #naključna izbira 40 industrij
 #
 naključnaizbirastolpcev<-(sample(colnames(Industry49_data[2:50]), 40))
 
-data1<-select(Industry49_data,Date,naključnaizbirastolpcev)
-View(data1)
+data0<-select(Industry49_data,Date,naključnaizbirastolpcev)
+View(data0)
 
 #1. pasage
+#from 071926-121929
+z<-6+12*3
+data1<-data0[1:z,]
+ff3<-ff3_original[1:42,]
 
 #we get alphas from
 alphas<-c()
@@ -75,17 +79,19 @@ betas
 #urejanje bete po velikosti
 betas_sorted<-sort(betas)
 betas_sorted
+
+
 #glede na velikost bete sedaj razdelimo industrije v 10 portfeljev
-portfolio1<-data1[names(betas_sorted)[1:4]]
-portfolio2<-data1[names(betas_sorted)[5:8]]
-portfolio3<-data1[names(betas_sorted)[9:12]]
-portfolio4<-data1[names(betas_sorted)[13:16]]
-portfolio5<-data1[names(betas_sorted)[17:20]]
-portfolio6<-data1[names(betas_sorted)[21:24]]
-portfolio7<-data1[names(betas_sorted)[25:28]]
-portfolio8<-data1[names(betas_sorted)[29:32]]
-portfolio9<-data1[names(betas_sorted)[33:36]]
-portfolio10<-data1[names(betas_sorted)[37:40]]
+portfolio1<-data0[names(betas_sorted)[1:4]]
+portfolio2<-data0[names(betas_sorted)[5:8]]
+portfolio3<-data0[names(betas_sorted)[9:12]]
+portfolio4<-data0[names(betas_sorted)[13:16]]
+portfolio5<-data0[names(betas_sorted)[17:20]]
+portfolio6<-data0[names(betas_sorted)[21:24]]
+portfolio7<-data0[names(betas_sorted)[25:28]]
+portfolio8<-data0[names(betas_sorted)[29:32]]
+portfolio9<-data0[names(betas_sorted)[33:36]]
+portfolio10<-data0[names(betas_sorted)[37:40]]
 
 #seštejemo vrednosti za vsak mesec da dobimo return od celotnega portfelja
 #priportfelju 1 ne seštevamo ampak vzamemo samo en stolpec,
@@ -125,10 +131,15 @@ portfolio10_returns<-portfolio10[1]+portfolio10[2]+portfolio10[3]+portfolio10[4]
 names(portfolio10_returns)<-"port10"
 
 #tabela vseh portfeljev
-portfelji_skupaj<-data.frame(data1[1],portfolio1_returns,portfolio2_returns,portfolio3_returns,portfolio4_returns,portfolio5_returns,portfolio6_returns,portfolio7_returns,portfolio8_returns,portfolio9_returns,portfolio10_returns)
+portfelji_skupaj_original<-data.frame(data0[1],portfolio1_returns,portfolio2_returns,portfolio3_returns,portfolio4_returns,portfolio5_returns,portfolio6_returns,portfolio7_returns,portfolio8_returns,portfolio9_returns,portfolio10_returns)
 View(portfelji_skupaj)
 
-#1. Pasage for portfolios
+#1.Pasage for portfolios
+
+#data from 011930-121934
+portfelji_skupaj<-portfelji_skupaj_original[(z+1):102,]
+ff3<-ff3_original[(z+1):102,]
+
 #we get portfolios alphas from
 alphas_p<-c()
 for (i in (2:11)){
@@ -156,6 +167,52 @@ for (i in (2:11)){
 }
 betas_p
 names(betas_p)<-names(portfelji_skupaj)[2:11]
-
+betas_p<-as.matrix(betas_p)
 #
-sum(portfelji_skupaj[2])
+# avg_values<-c()
+# for(i in (2:11)){
+#   avg_values[i-1]<- sum(portfelji_skupaj[i])/nrow(portfelji_skupaj)
+# }
+# names(avg_values)<-names(portfelji_skupaj)[2:11]
+# avg_values<-as.matrix(avg_values)
+
+#2.Pasage for portfolios
+
+#data from 011935-121938
+portfelji_skupaj<-portfelji_skupaj_original[103:150,]
+ff3<-ff3_original[103:150,]
+
+#bete v tebelo primerno za regresijo
+output<-data.frame(matrix(ncol=nrow(betas_p), nrow=nrow(portfelji_skupaj)))
+for(i in (1:nrow(betas_p))){
+  output[,i] = betas_p[i,]
+}
+output
+
+aa<-c()
+for (i in (2:11)){
+  y<-portfelji_skupaj[i]
+  y<-as.matrix(y)
+  x<-output[,i-1]
+  fit<-lm(y~x)
+  a<-coeftest(fit,vcov=NeweyWest(fit,verbose=T))
+}
+
+for (i in (2:11)){
+  y<-portfelji_skupaj[i]
+  y<-as.matrix(y)
+  x<-output[,i-1]
+  x<-as.matrix(x)
+  fit<-lm(y~X^2)
+  a<-coeftest(fit,vcov=NeweyWest(fit,verbose=T))
+}
+
+for (i in (2:11)){
+  y<-portfelji_skupaj[i]
+  y<-as.matrix(y)
+  x<-output[,i-1]
+  x<-x^2
+  X<-as.matrix(x)
+  fit<-lm(y~X)
+  a<-coeftest(fit,vcov=NeweyWest(fit,verbose=T))
+}
