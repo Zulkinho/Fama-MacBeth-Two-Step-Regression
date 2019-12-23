@@ -209,7 +209,7 @@ for (i in (2:11)){
   a<-coeftest(fit,vcov=NeweyWest(fit,verbose=T))
 }
 
-#SML for all data: if alha=0 then E[R_it-r_f ]= beta_p_E[R_mt-r_f]í°€ rf ]
+#SML for all data: if alha=0 then E[R_it-r_f ]= beta_p_E[R_mt-r_f]
 betas_sml<-c()
 for (i in (2:41)){
   y<-data0[i]-ff3_original[5]
