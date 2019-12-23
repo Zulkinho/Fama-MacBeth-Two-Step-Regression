@@ -190,13 +190,6 @@ for(i in (1:nrow(betas_p))){
 output
 
 aa<-c()
-for (i in (2:11)){
-  y<-portfelji_skupaj[i]
-  y<-as.matrix(y)
-  x<-output[,i-1]
-  fit<-lm(y~x)
-  a<-coeftest(fit,vcov=NeweyWest(fit,verbose=T))
-}
 
 for (i in (2:11)){
   y<-portfelji_skupaj[i]
@@ -213,6 +206,21 @@ for (i in (2:11)){
   x<-output[,i-1]
   x<-as.matrix(x)
   fit<-lm(y~x^2)
+  a<-coeftest(fit,vcov=NeweyWest(fit,verbose=T))
 }
 
+#SML for all data: if alha=0 then E[R_it-r_f ]= beta_p_E[R_mt-r_f]í°€ rf ]
+betas_sml<-c()
+for (i in (2:41)){
+  y<-data0[i]-ff3_original[5]
+  y<-as.numeric(y[[1]])
+  y<-mean(y)
+  x<-ff3_original[2]
+  x<-as.numeric(x[[1]])
+  x<-mean(x)
+  fit<-lm(y~0+x)
+  betas_sml[i-1]<- fit[1]
+}
+betas_sml<-as.list(betas_sml)
+betas_sml
 
