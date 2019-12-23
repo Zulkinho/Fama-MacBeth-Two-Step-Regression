@@ -203,7 +203,7 @@ for (i in (2:11)){
   y<-as.matrix(y)
   x<-output[,i-1]
   x<-as.matrix(x)
-  fit<-lm(y~X^2)
+  fit<-lm(y~x)
   a<-coeftest(fit,vcov=NeweyWest(fit,verbose=T))
 }
 
@@ -211,8 +211,8 @@ for (i in (2:11)){
   y<-portfelji_skupaj[i]
   y<-as.matrix(y)
   x<-output[,i-1]
-  x<-x^2
-  X<-as.matrix(x)
-  fit<-lm(y~X)
-  a<-coeftest(fit,vcov=NeweyWest(fit,verbose=T))
+  x<-as.matrix(x)
+  fit<-lm(y~x^2)
 }
+
+
