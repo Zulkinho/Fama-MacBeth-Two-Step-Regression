@@ -59,6 +59,7 @@ a<-coeftest(fit,vcov=NeweyWest(fit,verbose=T))
 alphas[i-1] <- a[1]
 }
 #alphe za posamezne industrije
+names(alphas)<-names(data1)[2:41]
 alphas
 
 #we get betas from
@@ -97,11 +98,13 @@ portfolio10<-data0[names(betas_sorted)[37:40]]
 #priportfelju 1 ne seštevamo ampak vzamemo samo en stolpec,
 #saj je sestavljen iz vrednosti, ki pomenijo "missing data are indicated by -99.99 or -999."
 
-portfolio1_returns<-portfolio1[1]
-names(portfolio1_returns)<-"port1"
+
 
 # portfolio2_returns<-portfolio2[1]+portfolio2[2]+portfolio2[3]+portfolio2[4]
 # names(portfolio2_returns)<-"port2"
+
+portfolio1_returns<-portfolio1[1]+portfolio1[2]+portfolio1[3]+portfolio1[4]
+names(portfolio1_returns)<-"port1"
 
 portfolio2_returns<-portfolio2[1]+portfolio2[2]+portfolio2[3]+portfolio2[4]
 names(portfolio2_returns)<-"port2"
@@ -153,6 +156,7 @@ for (i in (2:11)){
 }
 alphas_p
 names(alphas_p)<-names(portfelji_skupaj)[2:11]
+alphas_p<-as.matrix(alphas_p)
 
 #we get portfolios betas from
 betas_p<-c()
@@ -189,8 +193,7 @@ for(i in (1:nrow(betas_p))){
 }
 output
 
-aa<-c()
-
+fact<-c()
 for (i in (2:11)){
   y<-portfelji_skupaj[i]
   y<-as.matrix(y)
@@ -198,8 +201,12 @@ for (i in (2:11)){
   x<-as.matrix(x)
   fit<-lm(y~x)
   a<-coeftest(fit,vcov=NeweyWest(fit,verbose=T))
+  fact[i-1] <- a[1]
 }
+names(fact)<-names(portfelji_skupaj)[2:11]
+fact<-as.matrix(fact)
 
+fact2<-c()
 for (i in (2:11)){
   y<-portfelji_skupaj[i]
   y<-as.matrix(y)
@@ -207,7 +214,10 @@ for (i in (2:11)){
   x<-as.matrix(x)
   fit<-lm(y~x^2)
   a<-coeftest(fit,vcov=NeweyWest(fit,verbose=T))
+  fact2[i-1] <- a[1]
 }
+names(fact2)<-names(portfelji_skupaj)[2:11]
+fact2<-as.matrix(fact2)
 
 #SML for all data: if alha=0 then E[R_it-r_f ]= beta_p_E[R_mt-r_f]
 betas_sml<-c()
@@ -222,5 +232,4 @@ for (i in (2:41)){
   betas_sml[i-1]<- fit[1]
 }
 betas_sml<-as.list(betas_sml)
-betas_sml
 
